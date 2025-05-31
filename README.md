@@ -1,8 +1,36 @@
 # 🌾 Rice Paddy Image Classification System
 
-This is a deep learning-based end-to-end system for classifying rice paddy plant diseases using images. The project is part of a broader multi-task pipeline, with Task 1 completed and Tasks 2 & 3 coming soon.
+This project was developed as part of a machine learning assignment for **COSC2753 (RMIT University, 2025A)**. The goal was to design a fully self-contained deep learning pipeline to detect **rice leaf diseases** from images — with the added challenge of building everything **from scratch without any pre-trained models or weights**.
 
 ---
+
+## 🎯 Objectives and Constraints
+
+While academic in context, the assignment mimicked real-world production constraints:
+
+- ❌ No use of pre-trained architectures or ImageNet weights
+- ✅ Models must be trained **entirely on the provided dataset**
+- ⚖️ Handle class imbalance and rare disease detection
+- 📷 Perform image cleaning, augmentation, and validation
+- 📊 Evaluate not just accuracy, but generalization performance
+
+This forced us to tailor every model decision (architecture, loss function, learning rate schedule, data balancing strategy) specifically to this dataset and task.
+
+---
+
+## 📦 Project Overview
+
+The full pipeline is structured to support multiple tasks:
+
+- **Task 1 – Disease Classification** ✅ (*complete*)
+- **Task 2 – Variety Prediction** 🔜
+- **Task 3 – Age Estimation** 🔜
+- **Final Phase – Unified Deployment (Streamlit or Docker)** 🔜
+
+All code is written in modular notebooks, fully documented and designed for reproducibility and future extension.
+
+---
+
 
 ## 🚀 Current Task: Disease Classification (Task 1)
 
