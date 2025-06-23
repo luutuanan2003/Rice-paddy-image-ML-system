@@ -24,27 +24,13 @@ The full pipeline is structured to support multiple tasks:
 
 - **Task 1 – Disease Classification** ✅ (*complete*)
 - **Task 2 – Variety Prediction** 🔜
-- **Task 3 – Age Estimation** 🔜
+- **Task 3 – Age Estimation** ✅ (*complete*)
 - **Final Phase – Unified Deployment (Streamlit or Docker)** 🔜
 
 All code is written in modular notebooks, fully documented and designed for reproducibility and future extension.
 
 ---
 
-
-## 🚀 Current Task: Disease Classification (Task 1)
-
-This model classifies paddy leaf images into **10 classes** — 9 disease types + 1 healthy class (`normal`).
-
-| Architecture     | InceptionV3 (no pretrained weights) |
-|------------------|--------------------------------------|
-| Input Size       | 299×299                              |
-| Optimizer        | RMSprop                              |
-| Loss Function    | Categorical Crossentropy + Label Smoothing |
-| Balancing        | Image augmentation + SMOTE + class weights |
-| Final Accuracy   | ✅ ~93.5% train, ~92% validation      |
-
----
 
 ## 🧠 Dataset
 
@@ -53,6 +39,5 @@ The original dataset includes:
 - Each image has `label`, `variety`, and `age` metadata
 
 ⚠️ The dataset is not stored in this repository.  
-You can download it from this link:  
-📦 *(insert Google Drive or GitHub Release link here)*
+You can download it from Kaggle. However, it has been modified so that the data is imbalance and not pure to facilitate the process of data engineering.
 
