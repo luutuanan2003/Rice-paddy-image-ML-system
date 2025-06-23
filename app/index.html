@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🌾 Rice Leaf Multi-Task Predictor</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #2b7a78;
+      margin-bottom: 0.5rem;
+    }
+
+    p.description {
+      max-width: 600px;
+      color: #555;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    input[type="file"] {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #3aafa9;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2b7a78;
+    }
+
+    #preview {
+      max-width: 100%;
+      margin: 1rem 0;
+      border-radius: 8px;
+      display: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #result {
+      background-color: #e6f7ff;
+      border: 1px solid #b3e5fc;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      margin-top: 1rem;
+      text-align: left;
+      color: #333;
+    }
+
+    .error {
+      background-color: #ffe6e6;
+      border: 1px solid #ff9999;
+      color: #b30000;
+    }
+
+    footer {
+      margin-top: 3rem;
+      color: #888;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌾 Rice Leaf Multi-Task Predictor</h1>
+  <p class="description">
+    Upload an image of a rice leaf to predict its <strong>disease</strong>, <strong>variety</strong>, and <strong>age</strong>.
+    The models are deep learning-based and trained on annotated field data.
+  </p>
+
+  <form id="upload-form">
+    <input type="file" id="image" accept="image/*" required />
+    <br />
+    <img id="preview" src="#" alt="Preview" />
+    <br />
+    <button type="submit">🔍 Predict</button>
+  </form>
+
+  <div id="result">No predictions yet.</div>
+
+  <footer>
+    Made with 🧠 TensorFlow & FastAPI | Built for rice health monitoring.
+  </footer>
+
+  <script>
+    const form = document.getElementById("upload-form");
+    const resultBox = document.getElementById("result");
+    const imageInput = document.getElementById("image");
+    const preview = document.getElementById("preview");
+
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = "none";
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const file = imageInput.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      resultBox.classList.remove("error");
+      resultBox.textContent = "⏳ Predicting...";
+
+      try {
+        const res = await fetch("/predict", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          throw new Error("Server error or invalid response.");
+        }
+
+        const data = await res.json();
+
+        const html = `
+          <strong>Disease:</strong> ${data.disease.name} (${(data.disease.confidence * 100).toFixed(1)}%)<br>
+          <strong>Variety:</strong> ${data.variety.name} (${(data.variety.confidence * 100).toFixed(1)}%)<br>
+          <strong>Predicted Age:</strong> ${data.age.predicted_age_days.toFixed(1)} days
+        `;
+
+        resultBox.innerHTML = html;
+      } catch (err) {
+        resultBox.classList.add("error");
+        resultBox.textContent = "❌ Error: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
